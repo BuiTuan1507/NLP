@@ -38,6 +38,7 @@ print(textdata.count("hoa quả"))
 print(word_counts["hoa"])
 print(word_counts["quả"])
 # p = p(w(i-1) w(i)) / p(wi-1)
+# tinh toan bi _gram
 def bi_grams (a,b) :
     p = textdata.count(a) / word_counts[b]
     return p
@@ -51,8 +52,18 @@ def ramdom_Ngram (a):
         print(words[index-1])
     return 0
 
-def search_Word (data,word) :
+# ham tim so ki tu giong nhau giua tu du doan va tu sai
+def count(str1, str2):
+    c = 0
+    for i in str1:
+        if re.search(i, str2):
+            c = c + 1
+    return c
+# tim tu dung
+def search_Word (data,word,wrong_words) :
     bigram_word = {}
+    number_of_duplicate_character_max = 0;
+
     w1_max = 0
     solution_word = ""
     for i in range(len(data)) :
@@ -61,16 +72,29 @@ def search_Word (data,word) :
             one_bigram_word = data[i] +' ' + data[i+1]
             w1 = textdata.count(one_bigram_word)
             w2 = word_counts[data[i]]
-            if(w1 > w1_max ):
+
+            number_of_duplicate_character = count(wrong_words, data[i + 1])
+            # du doan theo so ki tu giong nhau
+            if (number_of_duplicate_character > number_of_duplicate_character_max) :
                 w1_max = w1
-                solution_word = data[i+1]
-                print(w1_max)
-                print(solution_word)
-    print(solution_word)
+                solution_word = data[i + 1]
+                number_of_duplicate_character_max = number_of_duplicate_character
+
+            #neu so ki tu bang nhau thi se du doan theo xac xuat
+            if (number_of_duplicate_character == number_of_duplicate_character_max) :
+                if(w1 > w1_max) :
+                    solution_word = data[i+1]
+                    number_of_duplicate_character_max = number_of_duplicate_character
+                    w1_max = w1
 
 
 
 
-search_Word(words,"hoa")
+    print("Từ tốt nhất sau từ  " + word + " là :" + solution_word)
+
+
+
+
+search_Word(words,"kinh","deahn")
 
 

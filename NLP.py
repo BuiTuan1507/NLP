@@ -110,11 +110,11 @@ class SpellChecker(object):
   def check(self, word):
     candidates = self._level_one_edits(word) or self._level_two_edits(word) or [word]
     valid_candidates = [w for w in candidates if w in self.vocabs]
-    return print(sorted([(c, self.word_probas[c]) for c in valid_candidates], key=lambda tup: tup[1], reverse=True))
+    return sorted([(c, self.word_probas[c]) for c in valid_candidates], key=lambda tup: tup[1], reverse=True)
 
 
 checker = SpellChecker("./data.csv")
 
-checker.check("lnog")
+print(checker.check("lnog"))
 
 #Bi-gram
