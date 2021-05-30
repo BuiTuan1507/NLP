@@ -58,7 +58,6 @@ if __name__ == '__main__':
 
 
 	data = readData('data.csv')
-	listOfBigrams, unigramCounts, bigramCounts = Bigramcreation(data)
-	bigramProb = calcBigramProb(listOfBigrams, unigramCounts, bigramCounts)
-
-    print(bigramProb)
+	#listOfBigrams, unigramCounts, bigramCounts = Bigramcreation(data)
+	#bigramProb = calcBigramProb(listOfBigrams, unigramCounts, bigramCounts)
+	print(len("huyen"))

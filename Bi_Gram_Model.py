@@ -11,6 +11,13 @@ from collections import Counter, defaultdict
 text = [['a', 'b', 'c'], ['a', 'c', 'd', 'c', 'e', 'f']]
 
 from nltk.util import pad_sequence
+
+class N_Gram:
+  def __init__(self, word, probability):
+    self.word = word
+    self.probability = probability
+
+
 list(pad_sequence(text[0],
                   pad_left=True, left_pad_symbol="<s>",
                   pad_right=True, right_pad_symbol="</s>",
@@ -61,7 +68,8 @@ def count(str1, str2):
     return c
 # tim tu dung
 def search_Word (data,word,wrong_words) :
-    bigram_word = {}
+
+    bigram_word = []
     number_of_duplicate_character_max = 0;
 
     w1_max = 0
@@ -74,23 +82,35 @@ def search_Word (data,word,wrong_words) :
             w2 = word_counts[data[i]]
 
             number_of_duplicate_character = count(wrong_words, data[i + 1])
+
+
+            if (w1 == 0) :
+                w1 = 1
+
+            biGramp = N_Gram(data[i + 1], w1 / w2)
+            bigram_word.append(biGramp)
             # du doan theo so ki tu giong nhau
             if (number_of_duplicate_character > number_of_duplicate_character_max) :
                 w1_max = w1
                 solution_word = data[i + 1]
                 number_of_duplicate_character_max = number_of_duplicate_character
+                #biGramp = N_Gram(data[i+1], w1 / w2)
+                #bigram_word.append(biGramp)
 
             #neu so ki tu bang nhau thi se du doan theo xac xuat
             if (number_of_duplicate_character == number_of_duplicate_character_max) :
+               #biGram = N_Gram(data[i+1] , w1/w2)
+                #bigram_word.append(biGram)
+
                 if(w1 > w1_max) :
                     solution_word = data[i+1]
                     number_of_duplicate_character_max = number_of_duplicate_character
                     w1_max = w1
 
-
-
-
+    result = sorted(bigram_word,key=lambda x: x.probability, reverse=True)
     print("Từ tốt nhất sau từ  " + word + " là :" + solution_word)
+    for i in range(len(result)):
+        print("( " + result[i].word + ", " + str(result[i].probability) + " )")
 
 
 

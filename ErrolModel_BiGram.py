@@ -114,7 +114,87 @@ class SpellChecker(object):
 
 
 checker = SpellChecker("./data.csv")
-print(checker.check("lnog"))
-print(checker.check("lnog")[0][0])
+
 
 #Bi-gram
+
+textdata_biGram = open("data.csv", "r",encoding="utf8").read()
+class N_Gram:
+  def __init__(self, word, probability):
+    self.word = word
+    self.probability = probability
+
+
+
+
+def count(str1, str2):
+    c = 0
+    for i in str1:
+        if re.search(i, str2):
+            c = c + 1
+    return c
+# tim tu dung
+def search_Word (data,word,wrong_words) :
+    length_Of_wrong_word = len(wrong_words)
+    bigram_word = []
+    number_of_duplicate_character_max = 0;
+
+    w1_max = 0
+    solution_word = ""
+    for i in range(len(data)) :
+
+        if (data[i] == word) :
+            one_bigram_word = data[i] +' ' + data[i+1]
+            w1 = textdata_biGram.count(one_bigram_word)
+            w2 = word_counts[data[i]]
+
+            number_of_duplicate_character = count(wrong_words, data[i + 1])
+
+            #chuan hoa du lieu
+            if (w1 == 0) :
+                w1 = 1
+            length_word1 = len(data[i + 1])
+            biGramp = N_Gram(data[i + 1], w1 / w2)
+            bigram_word.append(biGramp)
+            # du doan theo so ki tu giong nhau
+            if (number_of_duplicate_character > number_of_duplicate_character_max) :
+                if ((length_word1 - length_Of_wrong_word >= -1) and (length_word1 - length_Of_wrong_word <= 1)):
+                    w1_max = w1
+                    solution_word = data[i + 1]
+                    number_of_duplicate_character_max = number_of_duplicate_character
+
+                    #biGramp = N_Gram(data[i+1], w1 / w2)
+                    #bigram_word.append(biGramp)
+
+            #neu so ki tu bang nhau thi se du doan theo xac xuat
+            if (number_of_duplicate_character == number_of_duplicate_character_max) :
+                #biGram = N_Gram(data[i+1] , w1/w2)
+                #bigram_word.append(biGram)
+
+                #tu du doan phai co do dai lon, be hon so v tu dung la 1
+                if( ( length_word1 - length_Of_wrong_word >= -1) and (length_word1 - length_Of_wrong_word <= 1) ):
+                    if (w1 > w1_max):
+                        solution_word = data[i + 1]
+                        number_of_duplicate_character_max = number_of_duplicate_character
+                        w1_max = w1
+
+    result = sorted(bigram_word,key=lambda x: x.probability, reverse=True)
+
+    for i in range(len(result)):
+        print("( " + result[i].word + ", " + str(result[i].probability) + " )")
+    print("Sửa từ: " + wrong_words + " trong " + word + " " + wrong_words + " là : " + word +" " +  solution_word)
+
+
+#Test # hoa huệ, kiến trúc , kiến thức
+previous_word = "kiến"
+true_word = "trúc"
+false_word = "tqúcd"
+
+print(checker.check(false_word))
+word_errorl_model = ""
+if (len(checker.check(false_word)) > 0):
+    word_errorl_model = checker.check(false_word)[0][0]
+    print("Từ học theo errol model : " + word_errorl_model)
+if not (word_errorl_model == true_word):
+    search_Word(words,previous_word,false_word)
+
