@@ -23,9 +23,10 @@ list(pad_sequence(text[0],
                   pad_right=True, right_pad_symbol="</s>",
                   n=2))
 
-padded_sent = list(pad_sequence(text[0], pad_left=True, left_pad_symbol="<s>",
-                                pad_right=True, right_pad_symbol="</s>", n=2))
+padded_sent = list(pad_sequence(text[0], pad_left=True, left_pad_symbol="<s> ",
+                                pad_right=True, right_pad_symbol=" </s>", n=2))
 print(list(ngrams(padded_sent, n=2)))
+
 
 textdata = open("data.csv", "r",encoding="utf8").read()
 

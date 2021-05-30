@@ -116,9 +116,12 @@ class SpellChecker(object):
 checker = SpellChecker("./data.csv")
 
 
+
+
 #Bi-gram
 
 textdata_biGram = open("data.csv", "r",encoding="utf8").read()
+#lop N_gram co thuộc tính word và xác xuất để dễ in ra
 class N_Gram:
   def __init__(self, word, probability):
     self.word = word
@@ -126,7 +129,7 @@ class N_Gram:
 
 
 
-
+# hàm đếm số kí tự giống nhau 2 xâu
 def count(str1, str2):
     c = 0
     for i in str1:
@@ -135,28 +138,39 @@ def count(str1, str2):
     return c
 # tim tu dung
 def search_Word (data,word,wrong_words) :
+    # độ dài từ sai
     length_Of_wrong_word = len(wrong_words)
+    #chứa kết quả là mảngg xác xuất + từ
     bigram_word = []
-    number_of_duplicate_character_max = 0;
-
+    #số kí tự trùng nhau nhiều nhất
+    number_of_duplicate_character_max = 0
+    # xác xuất lớn nhất
     w1_max = 0
+    #kết quả từ tốt nhất
     solution_word = ""
+    # chạy từ 1 đến cuối văn bản
     for i in range(len(data)) :
-
+        # nếu từ i bằng từ đứng trước
         if (data[i] == word) :
-            one_bigram_word = data[i] +' ' + data[i+1]
+            # xét xâu : từ đứng trước + từ sau
+            one_bigram_word = ' '+  data[i] +' ' + data[i+1]+" "
+            # đếm xâu
             w1 = textdata_biGram.count(one_bigram_word)
+            #đếm từ trước
             w2 = word_counts[data[i]]
-
+            #đếm số kí tự giống nhau giữa từ sai và tự gợi ý
             number_of_duplicate_character = count(wrong_words, data[i + 1])
 
             #chuan hoa du lieu
             if (w1 == 0) :
                 w1 = 1
+            # độ dài từ gợi ý
             length_word1 = len(data[i + 1])
+            # thêm vào mảng kết quả
             biGramp = N_Gram(data[i + 1], w1 / w2)
             bigram_word.append(biGramp)
             # du doan theo so ki tu giong nhau
+            # nếu lớn hơn thì cập nhât
             if (number_of_duplicate_character > number_of_duplicate_character_max) :
                 if ((length_word1 - length_Of_wrong_word >= -1) and (length_word1 - length_Of_wrong_word <= 1)):
                     w1_max = w1
@@ -167,6 +181,7 @@ def search_Word (data,word,wrong_words) :
                     #bigram_word.append(biGramp)
 
             #neu so ki tu bang nhau thi se du doan theo xac xuat
+            #nếu bằng thì xét đến độ dài, xác xuất
             if (number_of_duplicate_character == number_of_duplicate_character_max) :
                 #biGram = N_Gram(data[i+1] , w1/w2)
                 #bigram_word.append(biGram)
@@ -177,7 +192,7 @@ def search_Word (data,word,wrong_words) :
                         solution_word = data[i + 1]
                         number_of_duplicate_character_max = number_of_duplicate_character
                         w1_max = w1
-
+    #sắp xếp mảng kết quả theo xác xuất
     result = sorted(bigram_word,key=lambda x: x.probability, reverse=True)
 
     for i in range(len(result)):
@@ -185,10 +200,10 @@ def search_Word (data,word,wrong_words) :
     print("Sửa từ: " + wrong_words + " trong " + word + " " + wrong_words + " là : " + word +" " +  solution_word)
 
 
-#Test # hoa huệ, kiến trúc , kiến thức
-previous_word = "kiến"
-true_word = "trúc"
-false_word = "tqúcd"
+#Test # hoa huệ, kiến trúc , kiến thức, công nghệ ghệu
+previous_word = "hoa"
+true_word = "huệ"
+false_word = "hệu"
 
 print(checker.check(false_word))
 word_errorl_model = ""
@@ -197,4 +212,22 @@ if (len(checker.check(false_word)) > 0):
     print("Từ học theo errol model : " + word_errorl_model)
 if not (word_errorl_model == true_word):
     search_Word(words,previous_word,false_word)
+
+
+sentences = "tôi đi họcc ở trườngg"
+
+# hàm thêm <s> , </s> t copy bên bi_gram_model.py
+def divide_bi_gram(sentences):
+    words_1 = []
+
+    lines = sentences.readlines()
+    words_1 += re.findall(r'\w+')
+    list(pad_sequence(words_1[0],
+                      pad_left=True, left_pad_symbol="<s>",
+                      pad_right=True, right_pad_symbol="</s>",
+                      n=2))
+
+    padded_sent = list(pad_sequence(words_1[0], pad_left=True, left_pad_symbol="<s> ",
+                                    pad_right=True, right_pad_symbol=" </s>", n=2))
+    return print(list(ngrams(padded_sent, n=2)))
 
