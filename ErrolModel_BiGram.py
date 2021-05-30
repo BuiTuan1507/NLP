@@ -172,10 +172,10 @@ def search_Word (data,word,wrong_words) :
             # du doan theo so ki tu giong nhau
             # nếu lớn hơn thì cập nhât
             if (number_of_duplicate_character > number_of_duplicate_character_max) :
-                if ((length_word1 - length_Of_wrong_word >= -1) and (length_word1 - length_Of_wrong_word <= 1)):
-                    w1_max = w1
-                    solution_word = data[i + 1]
-                    number_of_duplicate_character_max = number_of_duplicate_character
+                w1_max = w1
+                solution_word = data[i + 1]
+                number_of_duplicate_character_max = number_of_duplicate_character
+
 
                     #biGramp = N_Gram(data[i+1], w1 / w2)
                     #bigram_word.append(biGramp)
@@ -187,11 +187,11 @@ def search_Word (data,word,wrong_words) :
                 #bigram_word.append(biGram)
 
                 #tu du doan phai co do dai lon, be hon so v tu dung la 1
-                if( ( length_word1 - length_Of_wrong_word >= -1) and (length_word1 - length_Of_wrong_word <= 1) ):
-                    if (w1 > w1_max):
-                        solution_word = data[i + 1]
-                        number_of_duplicate_character_max = number_of_duplicate_character
-                        w1_max = w1
+                if (w1 > w1_max):
+                    solution_word = data[i + 1]
+                    number_of_duplicate_character_max = number_of_duplicate_character
+                    w1_max = w1
+
     #sắp xếp mảng kết quả theo xác xuất
     result = sorted(bigram_word,key=lambda x: x.probability, reverse=True)
 
